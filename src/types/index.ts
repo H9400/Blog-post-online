@@ -41,3 +41,17 @@ export interface MockBlogPost {
   coverImage?: string;
   tags?: string[];
 }
+
+// API response types
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
+
+// Backend connection types
+export interface BackendConfig {
+  type: 'supabase' | 'mongodb';
+  url: string;
+  apiKey?: string;
+}

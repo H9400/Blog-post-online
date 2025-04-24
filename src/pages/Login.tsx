@@ -3,22 +3,35 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import AuthForm from '@/components/AuthForm';
+import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
   const { toast } = useToast();
 
-  const handleLogin = (formData: { email: string; password: string }) => {
-    // Here we would typically call an API to authenticate the user
-    // For the demo, we'll just simulate a successful login
-    console.log('Login form data:', formData);
-    
-    // Simulate API call delay
-    setTimeout(() => {
-      // Redirect to dashboard after successful login
+  // Redirect if already logged in
+  React.useEffect(() => {
+    if (isAuthenticated) {
       navigate('/dashboard');
-    }, 1500);
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleLogin = async (formData: { email: string; password: string }) => {
+    try {
+      const success = await login(formData.email, formData.password);
+      
+      if (success) {
+        // Redirect to dashboard will happen automatically due to the useEffect
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        variant: "destructive",
+      });
+    }
   };
 
   return (

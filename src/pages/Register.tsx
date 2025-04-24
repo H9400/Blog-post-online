@@ -3,22 +3,44 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import AuthForm from '@/components/AuthForm';
+import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
+  const { register, isAuthenticated } = useAuth();
   const { toast } = useToast();
 
-  const handleRegister = (formData: { name?: string; email: string; password: string }) => {
-    // Here we would typically call an API to register the user
-    // For the demo, we'll just simulate a successful registration
-    console.log('Registration form data:', formData);
-    
-    // Simulate API call delay
-    setTimeout(() => {
-      // Redirect to dashboard after successful registration
+  // Redirect if already logged in
+  React.useEffect(() => {
+    if (isAuthenticated) {
       navigate('/dashboard');
-    }, 1500);
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleRegister = async (formData: { name?: string; email: string; password: string }) => {
+    try {
+      if (!formData.name) {
+        toast({
+          title: "Error",
+          description: "Name is required",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const success = await register(formData.name, formData.email, formData.password);
+      
+      if (success) {
+        // Redirect to dashboard will happen automatically due to the useEffect
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        variant: "destructive",
+      });
+    }
   };
 
   return (

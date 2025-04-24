@@ -2,16 +2,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Settings } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // Mock authentication state - will be replaced with actual auth later
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated, loading, logout } = useAuth();
 
-  // Toggle authentication for demo purposes
-  const toggleAuth = () => {
-    setIsAuthenticated(!isAuthenticated);
+  const handleLogout = () => {
+    logout();
   };
 
   return (
@@ -33,7 +32,7 @@ const Header: React.FC = () => {
               Blog
             </Link>
             
-            {isAuthenticated ? (
+            {!loading && isAuthenticated ? (
               <>
                 <Link to="/dashboard" className="text-gray-700 hover:text-blog-primary font-medium">
                   Dashboard
@@ -41,7 +40,10 @@ const Header: React.FC = () => {
                 <Link to="/create-post" className="text-gray-700 hover:text-blog-primary font-medium">
                   Write
                 </Link>
-                <Button onClick={toggleAuth} variant="outline">Sign Out</Button>
+                <Link to="/settings" className="text-gray-700 hover:text-blog-primary font-medium">
+                  <Settings size={20} />
+                </Link>
+                <Button onClick={handleLogout} variant="outline">Sign Out</Button>
               </>
             ) : (
               <>
@@ -82,7 +84,7 @@ const Header: React.FC = () => {
                 Blog
               </Link>
               
-              {isAuthenticated ? (
+              {!loading && isAuthenticated ? (
                 <>
                   <Link 
                     to="/dashboard" 
@@ -98,9 +100,16 @@ const Header: React.FC = () => {
                   >
                     Write
                   </Link>
+                  <Link 
+                    to="/settings" 
+                    className="text-gray-700 hover:text-blog-primary font-medium py-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Settings
+                  </Link>
                   <Button 
                     onClick={() => {
-                      toggleAuth();
+                      handleLogout();
                       setIsMenuOpen(false);
                     }} 
                     variant="outline" 
