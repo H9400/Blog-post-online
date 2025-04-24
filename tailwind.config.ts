@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,15 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				blog: {
+					primary: '#0ea5e9',
+					secondary: '#0284c7',
+					accent: '#bae6fd',
+					background: '#f8fafc',
+					text: '#334155',
+					heading: '#1e293b',
+					muted: '#94a3b8'
 				}
 			},
 			borderRadius: {
@@ -84,13 +94,62 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					'100%': {
+						opacity: '1', 
+						transform: 'translateY(0)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out'
+			},
+			typography: {
+				DEFAULT: {
+					css: {
+						maxWidth: '65ch',
+						color: '#334155',
+						h1: {
+							color: '#1e293b',
+							fontWeight: '700',
+						},
+						h2: {
+							color: '#1e293b',
+							fontWeight: '600',
+						},
+						h3: {
+							color: '#1e293b',
+							fontWeight: '600',
+						},
+						h4: {
+							color: '#1e293b',
+							fontWeight: '600',
+						},
+						p: {
+							color: '#334155',
+							lineHeight: '1.7',
+						},
+						a: {
+							color: '#0ea5e9',
+							textDecoration: 'none',
+							'&:hover': {
+								textDecoration: 'underline',
+							},
+						},
+					},
+				},
+			},
 		}
 	},
-	plugins: [require("tailwindcss-animate")],
+	plugins: [
+		require("tailwindcss-animate"),
+		require("@tailwindcss/typography"),
+	],
 } satisfies Config;
